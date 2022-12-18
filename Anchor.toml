@@ -3,6 +3,7 @@ seeds = false
 skip-lint = false
 [programs.localnet]
 type_cosplay = "12nnnKByohts2zHU5tbfi18WjxYy5YrrvoZdRdEkBxgw"
+type_checked = "EU66XDppFCf2Bg7QQr59nyykj9ejWaoW93TSkk1ufXh3"
 
 [registry]
 url = "https://api.apr.dev"
