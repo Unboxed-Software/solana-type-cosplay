@@ -1,6 +1,8 @@
 use anchor_lang::prelude::*;
 
-declare_id!("EU66XDppFCf2Bg7QQr59nyykj9ejWaoW93TSkk1ufXh3");
+declare_id!("G36iNpB591wxFeaeq55qgTwHKJspBrETmgok94oyqgcc");
+
+const DISCRIMINATOR_SIZE: usize = 8;
 
 #[program]
 pub mod type_checked {
@@ -27,7 +29,7 @@ pub struct InitializeAdmin<'info> {
     #[account(
         init,
         payer = admin,
-        space = 8 + 32
+        space = DISCRIMINATOR_SIZE + AdminConfig::INIT_SPACE
     )]
     pub admin_config: Account<'info, AdminConfig>,
     #[account(mut)]
@@ -40,7 +42,7 @@ pub struct InitializeUser<'info> {
     #[account(
         init,
         payer = user,
-        space = 8 + 32
+        space = DISCRIMINATOR_SIZE + User::INIT_SPACE
     )]
     pub user_account: Account<'info, User>,
     #[account(mut)]
@@ -61,11 +63,13 @@ pub struct UpdateAdmin<'info> {
 }
 
 #[account]
+#[derive(InitSpace)]
 pub struct AdminConfig {
     admin: Pubkey,
 }
 
 #[account]
+#[derive(InitSpace)]
 pub struct User {
     user: Pubkey,
 }
