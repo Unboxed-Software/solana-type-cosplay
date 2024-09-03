@@ -1,21 +1,20 @@
 use anchor_lang::prelude::*;
-use borsh::{BorshDeserialize, BorshSerialize};
 
-declare_id!("12nnnKByohts2zHU5tbfi18WjxYy5YrrvoZdRdEkBxgw");
+declare_id!("AYij7hXhPU5bmm43F4Nq6iiUL9G5VaHERm6Twet4U15b");
 
 #[program]
 pub mod type_cosplay {
     use super::*;
 
     pub fn initialize_admin(ctx: Context<Initialize>) -> Result<()> {
-        let space = 32;
+        let space = AdminConfig::INIT_SPACE;
         let lamports = Rent::get()?.minimum_balance(space as usize);
 
         let ix = anchor_lang::solana_program::system_instruction::create_account(
             &ctx.accounts.payer.key(),
             &ctx.accounts.new_account.key(),
             lamports,
-            space,
+            space.try_into().unwrap(),
             &ctx.program_id,
         );
 
@@ -39,14 +38,14 @@ pub mod type_cosplay {
     }
 
     pub fn initialize_user(ctx: Context<Initialize>) -> Result<()> {
-        let space = 32;
+        let space = User::INIT_SPACE;
         let lamports = Rent::get()?.minimum_balance(space as usize);
 
         let ix = anchor_lang::solana_program::system_instruction::create_account(
             &ctx.accounts.payer.key(),
             &ctx.accounts.new_account.key(),
             lamports,
-            space,
+            space.try_into().unwrap(),
             &ctx.program_id,
         );
 
@@ -96,18 +95,18 @@ pub struct Initialize<'info> {
 #[derive(Accounts)]
 pub struct UpdateAdmin<'info> {
     #[account(mut)]
-    /// CHECK:
-    admin_config: AccountInfo<'info>,
+    /// CHECK: This account is not being validated by Anchor
+    admin_config: UncheckedAccount<'info>,
     new_admin: SystemAccount<'info>,
     admin: Signer<'info>,
 }
 
-#[derive(BorshSerialize, BorshDeserialize)]
+#[derive(AnchorSerialize, AnchorDeserialize, InitSpace)]
 pub struct AdminConfig {
     admin: Pubkey,
 }
 
-#[derive(BorshSerialize, BorshDeserialize)]
+#[derive(AnchorSerialize, AnchorDeserialize, InitSpace)]
 pub struct User {
     user: Pubkey,
 }

@@ -1,34 +1,46 @@
-import * as anchor from "@project-serum/anchor"
-import { Program } from "@project-serum/anchor"
-import { TypeCosplay } from "../target/types/type_cosplay"
-import { expect } from "chai"
+import * as anchor from "@coral-xyz/anchor";
+import { Program } from "@coral-xyz/anchor";
+import { TypeCosplay } from "../target/types/type_cosplay";
+import { expect } from "chai";
 
 describe("type-cosplay", () => {
-  const provider = anchor.AnchorProvider.env()
-  anchor.setProvider(provider)
+  const provider = anchor.AnchorProvider.env();
+  anchor.setProvider(provider);
 
-  const program = anchor.workspace.TypeCosplay as Program<TypeCosplay>
+  const program = anchor.workspace.TypeCosplay as Program<TypeCosplay>;
 
-  const userAccount = anchor.web3.Keypair.generate()
-  const newAdmin = anchor.web3.Keypair.generate()
+  const userAccount = anchor.web3.Keypair.generate();
+  const newAdmin = anchor.web3.Keypair.generate();
 
   it("Initialize User Account", async () => {
-    await program.methods
-      .initializeUser()
-      .accounts({
-        newAccount: userAccount.publicKey,
-      })
-      .signers([userAccount])
-      .rpc()
-  })
+    try {
+      await program.methods
+        .initializeUser()
+        .accounts({
+          newAccount: userAccount.publicKey,
+        })
+        .signers([userAccount])
+        .rpc();
+    } catch (error) {
+      throw new Error(
+        `Initialization of user account failed: ${error.message}`
+      );
+    }
+  });
 
   it("Invoke update admin instruction with user account", async () => {
-    await program.methods
-      .updateAdmin()
-      .accounts({
-        adminConfig: userAccount.publicKey,
-        newAdmin: newAdmin.publicKey,
-      })
-      .rpc()
-  })
-})
+    try {
+      await program.methods
+        .updateAdmin()
+        .accounts({
+          adminConfig: userAccount.publicKey,
+          newAdmin: newAdmin.publicKey,
+        })
+        .rpc();
+    } catch (error) {
+      throw new Error(
+        `Invoking update admin instruction with user account failed: ${error.message}`
+      );
+    }
+  });
+});
