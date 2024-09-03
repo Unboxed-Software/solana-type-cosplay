@@ -1,15 +1,18 @@
+[toolchain]
+
 [features]
-seeds = false
+resolution = true
 skip-lint = false
+
 [programs.localnet]
+type_checked = "G36iNpB591wxFeaeq55qgTwHKJspBrETmgok94oyqgcc"
 type_cosplay = "12nnnKByohts2zHU5tbfi18WjxYy5YrrvoZdRdEkBxgw"
-type_checked = "EU66XDppFCf2Bg7QQr59nyykj9ejWaoW93TSkk1ufXh3"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "Localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
